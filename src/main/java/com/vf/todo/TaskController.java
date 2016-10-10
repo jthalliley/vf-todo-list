@@ -1,27 +1,32 @@
-package com.vf.main;
+package com.vf.todo;
 
 import java.util.List;
 
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.PathVariable;
 
-import com.vf.main.entities.Status;
-import com.vf.main.entities.Task;
-import com.vf.main.repositories.TaskRepository;
+import com.vf.todo.domain.Status;
+import com.vf.todo.domain.Task;
+import com.vf.todo.repositories.TaskRepository;
 
 import com.google.common.collect.Lists;
 
 
-@EnableAutoConfiguration
 @RestController
 public class TaskController {
 
     private TaskRepository taskRepository;
+
+    @Autowired
+    public void setTaskRepository(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+    }
+
 
     @RequestMapping(value="/task",  method=RequestMethod.PUT)
     @ResponseBody
@@ -55,16 +60,20 @@ public class TaskController {
 
     @RequestMapping(value="/task/{id}",  method=RequestMethod.DELETE)
     @ResponseBody
-    public String deleteTask(@PathVariable Long id) {
+    public void deleteTask(@PathVariable Long id) {
         taskRepository.delete(id);
-        return "deleted " + id;
     }
 
     @RequestMapping(value="/completedTasks",  method=RequestMethod.DELETE)
     @ResponseBody
-    public String deleteAllCompletedTasks() {
+    public void deleteAllCompletedTasks() {
         taskRepository.deleteByStatus(Status.COMPLETED);
-        return "deleted all completed";
+    }
+
+    @RequestMapping(value="/countTasks",  method=RequestMethod.GET)
+    @ResponseBody
+    public Long countTasks() {
+        return taskRepository.count();
     }
 
 }

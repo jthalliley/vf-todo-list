@@ -1,4 +1,4 @@
-package com.vf.main.entities;
+package com.vf.todo.domain;
 
 import org.apache.commons.lang3.text.WordUtils;
 

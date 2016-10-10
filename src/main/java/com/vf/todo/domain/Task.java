@@ -1,4 +1,4 @@
-package com.vf.main.entities;
+package com.vf.todo.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
