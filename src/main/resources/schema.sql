@@ -1,0 +1,8 @@
+DROP TABLE tasks;
+ 
+CREATE TABLE tasks (
+  id     NUMBER(10,0) NOT NULL AUTO_INCREMENT,
+  title  VARCHAR2(80) NOT NULL,
+  status VARCHAR2(20) NOT NULL,
+  PRIMARY KEY (ld)
+);

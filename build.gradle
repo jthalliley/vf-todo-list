@@ -1,0 +1,44 @@
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.1.RELEASE")
+  }
+}
+
+apply plugin: 'java'
+apply plugin: 'spring-boot'
+
+jar {
+  baseName = 'vf-spring-boot'
+  version =  '0.1.0'
+}
+
+repositories {
+  mavenCentral()
+}
+
+sourceCompatibility = 1.8;
+targetCompatibility = 1.8;
+
+  dependencies {
+    // Spring Boot
+    compile("org.springframework.boot:spring-boot-starter-web") {
+      exclude module: "spring-boot-starter-tomcat"
+    }
+    compile("org.springframework.boot:spring-boot-starter-jetty")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+
+    // Database/JPA
+    compile("com.h2database:h2")
+    compile("javax.persistence:persistence-api:1.0.2")
+    compile("org.springframework.data:spring-data-jpa:1.10.4.RELEASE")
+
+    // General
+    compile("org.apache.commons:commons-lang3:3.4")
+    compile("com.google.guava:guava:19.0")
+
+    // Testing
+    testCompile("junit:junit")
+}
