@@ -1,7 +1,124 @@
-<html>
-<head>
-</head>
-<body>
-<h1>To Do List</h1>
-</body>
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+  <head>
+    <title>VF To Do List</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <link th:href="@{/css/todo.css}"                                        rel="stylesheet" type="text/css"/>
+    <link href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+    
+    <script src="http://code.jquery.com/jquery-3.1.1.min.js"        type="text/javascript"></script>
+    <script src="http://code.jquery.com/ui/1.12.1/jquery-ui.min.js" type="text/javascript"></script>
+    
+<script language="javascript">
+
+var newTaskDialog;
+
+function bodyOnload() {
+    // Initial state of buttons
+    $("#completeTasks").attr("disabled",           true);
+    $("#reactivateTasks").attr("disabled",         true);
+    $("#deleteTasks").attr("disabled",             true);
+    $("#deleteAllCompletedTasks").attr("disabled", true);
+
+    newTaskDialog = $("#newTaskDialog").dialog({
+        autoOpen: false,
+        height: 200,
+        width:  500,
+        modal: true,
+        buttons: {
+            "Create" : createNewTask,
+            "Cancel" : function() {
+                newTaskDialog.dialog("close");
+            }
+        },
+        close: function() {
+            //        form[0].reset();
+            $("titleField").removeClass( "ui-state-error" );
+        }
+    });
+    
+    $("#newTask").button().on("click", function() {
+        newTaskDialog.find("#titleField").val("");
+        newTaskDialog.dialog("open");
+    });
+
+    $(document).ready(function() {
+        loadTodoTable();
+    });
+
+}
+
+function createNewTask() {
+
+    var titleField = newTaskDialog.find("#titleField").val();
+
+    if (titleField.length === 0) {
+        // Tell user to provide a non-empty title
+        console.log("no title provided");
+    } else {
+        // Add this new task as active.
+        console.log("title is: " + titleField);
+    }
+
+    newTaskDialog.dialog("close");
+}
+
+function loadTodoTable() {
+    $.ajax({
+        url: "http://localhost:8080/task"
+    }).then(function(data) {
+        var todoTableBody = $("#todoTable tbody");
+        todoTableBody.empty();
+        
+        $.each(data, function(index, value) {
+            todoTableBody.append(
+                "<tr>" +
+                "<td></td>" +
+                "<td>" + value.title  + "</td>" +
+                "<td>" + value.status + "</td>" +
+                "</tr>"
+            );
+        });
+    });
+};
+
+</script>
+
+  </head>
+
+  <body onload="javascript: bodyOnload();">
+    <h1>Current To Do List</h1>
+    <div id="buttons">
+      <button id="newTask"                      type="button" class="actionButton">New Task</button>
+      <button id="completeTasks"                type="button" class="actionButton">Complete Task(s)</button>
+      <button id="reactivateTasks"              type="button" class="actionButton">Re-activate Task(s)</button>
+      <button id="deleteTasks"                  type="button" class="actionButton">Delete Task(s)</button>
+      <button id="deleteAllCompletedTasks"      type="button" class="actionButton">Delete All Completed Tasks</button>
+    </div>
+
+    <div id="todoList">
+      <table id="todoTable">
+        <thead>
+          <td></td><td>Title</td><td>Status</td>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="newTaskDialog" title="Create new task">
+      <form>
+        <fieldset>
+          <label for="titleField">Title</label>
+          <input type="text"   name="titleField" id="titleField" value="" class="text ui-widget-content ui-corner-all"/>
+          <input type="submit" tabindex="-1" style="position:absolute; top:-1000px"/>
+        </fieldset>
+      </form>
+    </div>
+
+  </body>
+
 </html>
