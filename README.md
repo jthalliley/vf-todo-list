@@ -31,6 +31,7 @@ These are Mac-specific instructions.  Most will also work on Linux.
 5. Smart checkboxes.  When you change tabs, the previously selected checkboxes are no longer selected.
 6. Redundant operations.  You are allowed to reactivate an active task, complete an already completed task, and delete all completed tasks, even if there are none.
 7. Smart buttons.  Sometimes the button state (enabled/disabled) is not reset.
+8. Active task count.  Reflects what's on current tab.  If on COMPLETED tab, shows zero, but should show correct count.
 
 ## Simplifications
 
