@@ -15,13 +15,16 @@
 <script language="javascript">
 
 var newTaskDialog;
+var currentTab = "ALL";
 
 function bodyOnload() {
     // Initial state of buttons
+/*** for now
     $("#completeTasks").attr("disabled",           true);
     $("#reactivateTasks").attr("disabled",         true);
     $("#deleteTasks").attr("disabled",             true);
     $("#deleteAllCompletedTasks").attr("disabled", true);
+***/
 
     newTaskDialog = $("#newTaskDialog").dialog({
         autoOpen: false,
@@ -36,7 +39,7 @@ function bodyOnload() {
         },
         close: function() {
             //        form[0].reset();
-            $("titleField").removeClass( "ui-state-error" );
+            $("titleField").removeClass("ui-state-error");
         }
     });
     
@@ -46,9 +49,15 @@ function bodyOnload() {
     });
 
     $(document).ready(function() {
+        $("#tabs").tabs();
+
+        $("#tabs").on("tabsactivate", function(event, ui) {
+            currentTab = ui.newTab[0].innerText;
+            loadTodoTable();
+        });
+
         loadTodoTable();
     });
-
 }
 
 function createNewTask() {
@@ -61,27 +70,109 @@ function createNewTask() {
     } else {
         // Add this new task as active.
         console.log("title is: " + titleField);
+        newTask({title: titleField});
     }
 
     newTaskDialog.dialog("close");
 }
 
+function newTask(task) {
+    $.ajax({
+        url: "http://localhost:8080/task",
+        type: 'PUT',
+        contentType: 'application/json',
+        data: JSON.stringify(task),
+        dataType: 'json',
+        processData: false,
+        success: function(data) {
+            loadTodoTable();
+        },
+        error: function() {
+            console.log("Could not create task: " + task.title);
+        },
+    });
+};
+
+function setTaskStatus(taskIds, status) {
+    $.each(tasks, function(index, taskId) {
+        $.ajax({
+            url: "http://localhost:8080/task/" + taskId + "/" + status,
+            type: 'PUT',
+            contentType: 'application/json',
+            dataType: 'json',
+            processData: false,
+            success: function(data) {
+                loadTodoTable();
+            },
+            error: function() {
+                console.log("Could not modify task: " + taskId);
+            },
+        });
+    });
+};
+
+function deleteTasks(taskIds) {
+    $.each(tasks, function(index, taskId) {
+        $.ajax({
+            url: "http://localhost:8080/task/" + taskId,
+            type: 'DELETE',
+            contentType: 'application/json',
+            dataType: 'json',
+            processData: false,
+            success: function(data) {
+                loadTodoTable();
+            },
+            error: function() {
+                console.log("Could not delete task: " + taskId);
+            },
+        });
+    });
+};
+
+function deleteAllCompletedTasks() {
+    $.ajax({
+        url: "http://localhost:8080/completedTasks",
+        type: 'DELETE',
+        contentType: 'application/json',
+        dataType: 'json',
+        processData: false,
+        success: function(data) {
+            loadTodoTable();
+        },
+        error: function() {
+            console.log("Could not delete completed tasks.");
+        },
+    });
+};
+
 function loadTodoTable() {
     $.ajax({
-        url: "http://localhost:8080/task"
-    }).then(function(data) {
-        var todoTableBody = $("#todoTable tbody");
-        todoTableBody.empty();
-        
-        $.each(data, function(index, value) {
-            todoTableBody.append(
-                "<tr>" +
-                "<td></td>" +
-                "<td>" + value.title  + "</td>" +
-                "<td>" + value.status + "</td>" +
-                "</tr>"
-            );
-        });
+        url: "http://localhost:8080/task",
+        type: 'GET',
+        contentType: 'application/json',
+        dataType: 'json',
+        processData: false,
+        success: function(data) {
+            var todoTableBody = $("#" + currentTab + " #todoTable tbody");
+            todoTableBody.empty();
+            var activeCount = 0;
+            
+            $.each(data, function(index, value) {
+                todoTableBody.append(
+                    "<tr>" +
+                        "<td></td>" +
+                        "<td>" + value.title  + "</td>" +
+                        "<td>" + value.status + "</td>" +
+                        "</tr>"
+                );
+                if (value.status === "ACTIVE") activeCount++
+            });
+
+            $("#activeTaskCount").empty().append(activeCount + " active tasks");
+        },
+        error: function() {
+            console.log("Could not fetch all tasks.");
+        },
     });
 };
 
@@ -91,6 +182,8 @@ function loadTodoTable() {
 
   <body onload="javascript: bodyOnload();">
     <h1>Current To Do List</h1>
+    <h2 id="activeTaskCount"></h2>
+
     <div id="buttons">
       <button id="newTask"                      type="button" class="actionButton">New Task</button>
       <button id="completeTasks"                type="button" class="actionButton">Complete Task(s)</button>
@@ -98,15 +191,47 @@ function loadTodoTable() {
       <button id="deleteTasks"                  type="button" class="actionButton">Delete Task(s)</button>
       <button id="deleteAllCompletedTasks"      type="button" class="actionButton">Delete All Completed Tasks</button>
     </div>
+    <br/>
 
-    <div id="todoList">
-      <table id="todoTable">
-        <thead>
-          <td></td><td>Title</td><td>Status</td>
-        </thead>
-        <tbody>
-        </tbody>
-      </table>
+    <div id="tabs">
+      <ul>
+        <li><a href="#ALL">ALL</a></li>
+        <li><a href="#ACTIVE">ACTIVE</a></li>
+        <li><a href="#COMPLETED">COMPLETED</a></li>
+      </ul>
+      <div id="ALL">
+        <div id="todoList">
+          <table id="todoTable">
+            <thead>
+              <td></td><td>Title</td><td>Status</td>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div id="ACTIVE">
+        <div id="todoList">
+          <table id="todoTable">
+            <thead>
+              <td></td><td>Title</td><td>Status</td>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div id="COMPLETED">
+        <div id="todoList">
+          <table id="todoTable">
+            <thead>
+              <td></td><td>Title</td><td>Status</td>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
 
     <div id="newTaskDialog" title="Create new task">

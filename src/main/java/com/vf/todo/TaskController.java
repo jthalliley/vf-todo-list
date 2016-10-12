@@ -70,10 +70,4 @@ public class TaskController {
         taskRepository.deleteByStatus(Status.COMPLETED);
     }
 
-    @RequestMapping(value="/countTasks",  method=RequestMethod.GET)
-    @ResponseBody
-    public Long countTasks() {
-        return taskRepository.count();
-    }
-
 }
