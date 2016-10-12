@@ -49,7 +49,7 @@ public class TaskController {
 
     @RequestMapping(value="/task/{id}/{status}",  method=RequestMethod.PUT)
     @ResponseBody
-    public Task setTaskStatus(@PathVariable Long id, @PathVariable Status status) {
+    public Task setTaskStatus(@PathVariable Integer id, @PathVariable Status status) {
         Task task = taskRepository.findOne(id);
         if (task != null) {
             task.setStatus(status);
@@ -60,7 +60,7 @@ public class TaskController {
 
     @RequestMapping(value="/task/{id}",  method=RequestMethod.DELETE)
     @ResponseBody
-    public void deleteTask(@PathVariable Long id) {
+    public void deleteTask(@PathVariable Integer id) {
         taskRepository.delete(id);
     }
 
@@ -68,12 +68,6 @@ public class TaskController {
     @ResponseBody
     public void deleteAllCompletedTasks() {
         taskRepository.deleteByStatus(Status.COMPLETED);
-    }
-
-    @RequestMapping(value="/countTasks",  method=RequestMethod.GET)
-    @ResponseBody
-    public Long countTasks() {
-        return taskRepository.count();
     }
 
 }

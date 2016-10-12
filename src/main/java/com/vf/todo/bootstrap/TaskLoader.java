@@ -27,6 +27,7 @@ public class TaskLoader implements ApplicationListener<ContextRefreshedEvent> {
     @Override
     public void onApplicationEvent(final ContextRefreshedEvent event) {
 
+        // Start with a few tasks in the To-Do list...
         Task one = new Task("This is task 1", Status.ACTIVE);
         taskRepository.save(one);
         log.info("Saved task one, id: " + one.getId());
