@@ -19,7 +19,7 @@ These are Mac-specific instructions.  Most will also work on Linux.
 
 ## To Run RESTful Tests
 
-1. After "to run the app", open another terminal window and do `./tests.sh`.  You'll have to examine by eye, but it is straight forward.
+1. After "To Run the App", open another terminal window and do `./tests.sh`.  You'll have to examine by eye, but it is straight forward.
 
 
 ## Not Implemented
@@ -30,7 +30,10 @@ These are Mac-specific instructions.  Most will also work on Linux.
 4. Multi-user mode.  There is no notion of user implemented here, just one to-do list for all.
 5. Smart checkboxes.  When you change tabs, the previously selected checkboxes are no longer selected.
 6. Redundant operations.  You are allowed to reactivate an active task, complete an already completed task, and delete all completed tasks, even if there are none.
+7. Smart buttons.  Sometimes the button state (enabled/disabled) is not reset.
 
 ## Simplifications
 
 1. TaskController.  Normally I'd put the repository operations into a service layer, but they're so simple, I put them directly into the controller.
+2. Javascript.  I'd prefer to use more frameworks than just jQuery/jQuery UI, like bootstrap, mustache, etc.
+
