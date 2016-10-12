@@ -8,7 +8,7 @@ import javax.persistence.Id;
 @Entity
 public class Task {
 
-    @Id @GeneratedValue(strategy=GenerationType.AUTO) private Long id;
+    @Id @GeneratedValue(strategy=GenerationType.AUTO) private Integer id;
 
     private String title;
     private Status status;
@@ -20,12 +20,12 @@ public class Task {
         setStatus(status);
     }
 
-    public void setId(final     Long   id)     { this.id     = id;     }
-    public void setTitle(final  String title)  { this.title  = title;  }
-    public void setStatus(final Status status) { this.status = status; }
+    public void setId(final     Integer id)     { this.id     = id;     }
+    public void setTitle(final  String  title)  { this.title  = title;  }
+    public void setStatus(final Status  status) { this.status = status; }
 
-    public Long   getId()     { return this.id;     }
-    public String getTitle()  { return this.title;  }
-    public Status getStatus() { return this.status; }
+    public Integer getId()     { return this.id;     }
+    public String  getTitle()  { return this.title;  }
+    public Status  getStatus() { return this.status; }
 
 }

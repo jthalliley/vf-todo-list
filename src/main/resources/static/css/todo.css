@@ -37,6 +37,8 @@ h2 {
 
 #todoTable {
     border: 1px solid #dddddd;
+    width:  100%;
+    margin: 5px;
 }
 
 #todoTable thead td {
@@ -63,9 +65,5 @@ fieldset {
     padding:    0;    
     border:     0;    
     margin-top: 25px; 
-}
-
-.ui-dialog .ui-state-error {
-    padding: .3em; 
 }
 

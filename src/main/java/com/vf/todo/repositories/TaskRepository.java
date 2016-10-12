@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.vf.todo.domain.Status;
 import com.vf.todo.domain.Task;
 
-public interface TaskRepository extends CrudRepository<Task, Long> {
+public interface TaskRepository extends CrudRepository<Task, Integer> {
 
     // implicit:  findAll, findOne(id), delete(id), count
 

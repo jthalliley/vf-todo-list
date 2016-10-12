@@ -15,7 +15,7 @@ These are Mac-specific instructions.  Most will also work on Linux.
 
 1. In one terminal window, do `./run.sh`.
 2. Wait until the server is up. You'll see something like this `Started Application in 7.566 seconds (JVM running for 8.043)`.
-3. Point your browser to `http://localhost:8080/todo`.
+3. Point your browser to `http://localhost:8080`.
 
 ## To Run RESTful Tests
 
@@ -28,4 +28,9 @@ These are Mac-specific instructions.  Most will also work on Linux.
 2. Error checking.  Errors are generally logged to the Javascript console, but mostly happy paths were implemented.
 3. Browser-side filtering.  Instead of filtering tasks for the various tabs, a new fetch from the backend is done for each tab.  In a real-life situation, I'd just filter the full list of tasks.
 4. Multi-user mode.  There is no notion of user implemented here, just one to-do list for all.
+5. Smart checkboxes.  When you change tabs, the previously selected checkboxes are no longer selected.
+6. Redundant operations.  You are allowed to reactivate an active task, complete an already completed task, and delete all completed tasks, even if there are none.
 
+## Simplifications
+
+1. TaskController.  Normally I'd put the repository operations into a service layer, but they're so simple, I put them directly into the controller.
