@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
   <head>
-    <title>VF To Do List</title>
+    <title>VF To-Do List</title>
 
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
@@ -12,19 +12,14 @@
     <script src="http://code.jquery.com/jquery-3.1.1.min.js"        type="text/javascript"></script>
     <script src="http://code.jquery.com/ui/1.12.1/jquery-ui.min.js" type="text/javascript"></script>
     
-<script language="javascript">
+    <script language="javascript">
 
 var newTaskDialog;
-var currentTab = "ALL";
+var currentTab       = "ALL";
+var numTasksSelected = 0;
 
 function bodyOnload() {
-    // Initial state of buttons
-/*** for now
-    $("#completeTasks").attr("disabled",           true);
-    $("#reactivateTasks").attr("disabled",         true);
-    $("#deleteTasks").attr("disabled",             true);
-    $("#deleteAllCompletedTasks").attr("disabled", true);
-***/
+    enableDisableButtons();
 
     newTaskDialog = $("#newTaskDialog").dialog({
         autoOpen: false,
@@ -38,14 +33,29 @@ function bodyOnload() {
             }
         },
         close: function() {
-            //        form[0].reset();
-            $("titleField").removeClass("ui-state-error");
+//            $("titleField").removeClass("ui-state-error");
         }
     });
     
     $("#newTask").button().on("click", function() {
         newTaskDialog.find("#titleField").val("");
         newTaskDialog.dialog("open");
+    });
+
+    $("#completeTasks").button().on("click", function() {
+        console.log("#completeTasks");
+    });
+
+    $("#reactivateTasks").button().on("click", function() {
+        console.log("#reactivateTasks");
+    });
+
+    $("#deleteTasks").button().on("click", function() {
+        console.log("#deleteTasks");
+    });
+
+    $("#deleteAllCompletedTasks").button().on("click", function() {
+        console.log("#deleteAllCompletedTasks");
     });
 
     $(document).ready(function() {
@@ -146,8 +156,10 @@ function deleteAllCompletedTasks() {
 };
 
 function loadTodoTable() {
+    var status = (currentTab === "ALL" ? "" : "/" + currentTab);
+
     $.ajax({
-        url: "http://localhost:8080/task",
+        url: "http://localhost:8080/task" + status,
         type: 'GET',
         contentType: 'application/json',
         dataType: 'json',
@@ -176,20 +188,30 @@ function loadTodoTable() {
     });
 };
 
-</script>
+function enableDisableButtons() {
+
+    $("#completeTasks").attr("disabled",   numTasksSelected === 0);
+    $("#reactivateTasks").attr("disabled", numTasksSelected === 0);
+    $("#deleteTasks").attr("disabled",     numTasksSelected === 0);
+
+    $("#newTask").attr("disabled",                 false);
+    $("#deleteAllCompletedTasks").attr("disabled", true);
+}
+
+    </script>
 
   </head>
 
   <body onload="javascript: bodyOnload();">
-    <h1>Current To Do List</h1>
+    <h1>Current To-Do List</h1>
     <h2 id="activeTaskCount"></h2>
 
     <div id="buttons">
-      <button id="newTask"                      type="button" class="actionButton">New Task</button>
-      <button id="completeTasks"                type="button" class="actionButton">Complete Task(s)</button>
-      <button id="reactivateTasks"              type="button" class="actionButton">Re-activate Task(s)</button>
-      <button id="deleteTasks"                  type="button" class="actionButton">Delete Task(s)</button>
-      <button id="deleteAllCompletedTasks"      type="button" class="actionButton">Delete All Completed Tasks</button>
+      <button id="newTask"                 type="button" class="actionButton">New Task</button>
+      <button id="completeTasks"           type="button" class="actionButton">Complete Task(s)</button>
+      <button id="reactivateTasks"         type="button" class="actionButton">Re-activate Task(s)</button>
+      <button id="deleteTasks"             type="button" class="actionButton">Delete Task(s)</button>
+      <button id="deleteAllCompletedTasks" type="button" class="actionButton">Delete All Completed Tasks</button>
     </div>
     <br/>
 

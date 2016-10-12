@@ -27,4 +27,5 @@ These are Mac-specific instructions.  Most will also work on Linux.
 1. Push notifications.  If you modify the to do list in one browser, you'll not automatically see updates in another browser.  Refresh the page to see the updates.
 2. Error checking.  Errors are generally logged to the Javascript console, but mostly happy paths were implemented.
 3. Browser-side filtering.  Instead of filtering tasks for the various tabs, a new fetch from the backend is done for each tab.  In a real-life situation, I'd just filter the full list of tasks.
-4. 
+4. Multi-user mode.  There is no notion of user implemented here, just one to-do list for all.
+
