@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+  <head>
+    <title>VF To-Do List</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <link th:href="@{/css/todo.css}"                                        rel="stylesheet" type="text/css"/>
+    <link href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+    
+    <script src="http://code.jquery.com/jquery-3.1.1.min.js"        type="text/javascript"></script>
+    <script src="http://code.jquery.com/ui/1.12.1/jquery-ui.min.js" type="text/javascript"></script>
+    <script th:src="@{/js/todo.js}"                                 type="text/javascript"></script>
+  </head>
+
+  <body onload="javascript: todo.bodyOnload();">
+    <h1>Current To-Do List</h1>
+    <h2 id="activeTaskCount"></h2>
+
+    <div id="buttons">
+      <button id="newTask"                 type="button" class="actionButton">New Task</button>
+      <button id="completeTasks"           type="button" class="actionButton">Complete Task(s)</button>
+      <button id="reactivateTasks"         type="button" class="actionButton">Re-activate Task(s)</button>
+      <button id="deleteTasks"             type="button" class="actionButton">Delete Task(s)</button>
+      <button id="deleteAllCompletedTasks" type="button" class="actionButton">Delete All Completed Tasks</button>
+    </div>
+    <br/>
+
+    <div id="tabs">
+      <ul>
+        <li><a href="#ALL">ALL</a></li>
+        <li><a href="#ACTIVE">ACTIVE</a></li>
+        <li><a href="#COMPLETED">COMPLETED</a></li>
+      </ul>
+      <div id="ALL">
+        <div id="todoList">
+          <table id="todoTable">
+            <thead>
+              <td>Select</td><td>Title</td><td>Status</td>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div id="ACTIVE">
+        <div id="todoList">
+          <table id="todoTable">
+            <thead>
+              <td>Select</td><td>Title</td><td>Status</td>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div id="COMPLETED">
+        <div id="todoList">
+          <table id="todoTable">
+            <thead>
+              <td>Select</td><td>Title</td><td>Status</td>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div id="newTaskDialog" title="Create new task">
+      <form>
+        <fieldset>
+          <label for="titleField">Title</label>
+          <input type="text"   name="titleField" id="titleField" value="" class="text ui-widget-content ui-corner-all"/>
+          <input type="submit" tabindex="-1" style="position:absolute; top:-1000px"/>
+        </fieldset>
+      </form>
+    </div>
+
+  </body>
+
+</html>
