@@ -3,9 +3,12 @@ function ToDo() {
 
     "use strict";
 
+//    var baseURL          = "ec2-35-161-75-134.us-west-2.compute.amazonaws.com:8080";
+    var baseURL          = "localhost:8080";
     var newTaskDialog;
     var currentTab       = "ALL";
     var numTasksSelected = new Array();
+    var activeTasksCount = 0;
     
     numTasksSelected["ALL"]       = 0;
     numTasksSelected["ACTIVE"]    = 0;
@@ -95,7 +98,7 @@ function ToDo() {
         newTask: function(task) {
             var _this = this;
             $.ajax({
-                url:         "http://localhost:8080/task",
+                url:         "http://" + baseURL + "/task",
                 type:        'PUT',
                 contentType: 'application/json',
                 data:        JSON.stringify(task),
@@ -114,7 +117,7 @@ function ToDo() {
             var _this = this;
             $.each(taskIds, function(index, taskId) {
                 $.ajax({
-                    url:         "http://localhost:8080/task/" + taskId + "/" + status,
+                    url:         "http://" + baseURL + "/task/" + taskId + "/" + status,
                     type:        'PUT',
                     contentType: 'application/json',
                     dataType:    'json',
@@ -133,7 +136,7 @@ function ToDo() {
             var _this = this;
             $.each(taskIds, function(index, taskId) {
                 $.ajax({
-                    url:  "http://localhost:8080/task/" + taskId,
+                    url:  "http://" + baseURL + "/task/" + taskId,
                     type: 'DELETE',
                     success: function(data) {
                         _this.loadTodoTable();
@@ -148,7 +151,7 @@ function ToDo() {
         deleteAllCompletedTasks: function() {
             var _this = this;
             $.ajax({
-                url:         "http://localhost:8080/completedTasks",
+                url:         "http://" + baseURL + "/completedTasks",
                 type:        'DELETE',
                 processData: false,
                 success:     function(data) {
@@ -160,12 +163,29 @@ function ToDo() {
             });
         },
 
+	getActiveTasksCount: function() {
+            var _this = this;
+            $.ajax({
+                url:         "http://" + baseURL + "/countActiveTasks",
+                type:        'GET',
+                processData: false,
+                success:     function(data) {
+		    _this.activeTasksCount = data;
+                },
+                error: function (request, status, error) {
+                    alert("ERROR(" + status + "): " + error);
+                },
+            });
+	},
+	
         loadTodoTable: function() {
             var _this = this;
             var status = (currentTab === "ALL" ? "" : "/" + currentTab);
 
+	    _this.getActiveTasksCount();
+	    
             $.ajax({
-                url:         "http://localhost:8080/task" + status,
+                url:         "http://" + baseURL + "/task" + status,
                 type:        'GET',
                 contentType: 'application/json',
                 dataType:    'json',
@@ -173,7 +193,6 @@ function ToDo() {
                 success: function(data) {
                     var todoTableBody = $("#" + currentTab + " #todoTable tbody");
                     todoTableBody.empty();
-                    var activeCount = 0;
                     
                     $.each(data, function(index, value) {
                         todoTableBody.append(
@@ -183,10 +202,9 @@ function ToDo() {
                                 "<td>" + value.status + "</td>" +
                                 "</tr>"
                         );
-                        if (value.status === "ACTIVE") activeCount++
                     });
 
-                    $("#activeTaskCount").empty().append(activeCount + " active tasks");
+                    $("#activeTaskCount").empty().append(_this.activeTasksCount + " active tasks");
 
                     _this.enableDisableButtons(currentTab);
 

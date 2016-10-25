@@ -15,6 +15,9 @@ public interface TaskRepository extends CrudRepository<Task, Integer> {
 
     // implicit:  findAll, findOne(id), delete(id), count
 
+    @Query("SELECT COUNT(*) FROM Task t WHERE t.status = :status")
+    public Integer countByStatus(@Param("status") final Status status);
+
     @Query("SELECT t FROM Task t WHERE t.status = :status")
     public List<Task> findByStatus(@Param("status") final Status status);
 
