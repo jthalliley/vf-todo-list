@@ -1,5 +1,23 @@
 # vf-todo-list
 
+# Original Problem Statement
+
+Create a __To Do__ web app with a single database table that goes through the full stack (front-end interface to persisting the changes in the database) using whatever technology you are familiar with for UI and data access.  You can use a free, simple database for storage such as SQLite.  Here are the functional requirements of the app:
+
+* The user must be able to enter a new, active task.
+* Tasks entered must be displayed to the user in an acceptable format (for example: a list or a table).
+* The user must be able to mark an active task as __Complete__.
+* The user must be able to change a completed task back to __Active__.
+* The user must be able to delete an individual task.
+* The user must be able to delete all completed tasks in a single action.
+* The user must be able to toggle between showing all, only active, or only completed tasks.
+* Completed tasks should be shown differently than active ones.
+* The total number of active tasks should be displayed to the user.
+
+As with any test, please make sure that the coding done is your own; however, feel free to use any existing libraries or frameworks that might help you complete this task.  The app can be as simple or complex as you see fit, but please take this as an opportunity to show us what you can do.
+
+# Solution
+
 These are Mac-specific instructions.  Most will also work on Linux.
 
 ## Prerequisites
